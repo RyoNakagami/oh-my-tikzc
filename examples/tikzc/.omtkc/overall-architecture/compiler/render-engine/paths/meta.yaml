@@ -1,0 +1,10 @@
+kind: leaf
+status: active
+sources:
+  - src/render/paths.rs
+  - src/curve.rs
+  - src/arrows.rs
+children: []
+refs: []
+analyzed_commit: ef3a589
+working_tree_dirty: false

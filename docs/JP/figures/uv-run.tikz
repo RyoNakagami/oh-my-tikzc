@@ -1,0 +1,34 @@
+#| mainfont: IPAexGothic
+% `uv run omtkc.py` が解析対象のプロジェクトに触れずに依存を用意する仕組み．
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  % White background so the figure stays readable on dark themes.
+  \path[fill=white] (-2.19,-6.19) rectangle (16.26,4.94);
+  \node[entry] (caller) at (0,0) {AI エージェント\\または利用者のシェル};
+  \node[block] (script) at (6.5,3.6) {omtkc.py の先頭\\\# /// script\\requires-python >=3.10\\dependencies: pyyaml>=6};
+  \node[external] (uv) at (6.5,0) {uv\\スクリプトモード};
+  \node[external] (pypi) at (13,3.6) {PyPI\\初回のみ};
+  \node[store] (cache) at (13,0) {uv のキャッシュ\\使い捨て環境：\\Python + PyYAML};
+  \node[context] (repo) at (6.5,-3.8) {プロジェクトの環境\\pyproject.toml, uv.lock, .venv/};
+  \node[store] (omtkc) at (13,-3.8) {.omtkc/\\書き込むのはここだけ};
+
+  \draw[->] (caller) -- node[rel,above] {uv run omtkc.py} (uv);
+  \draw[->] (script) -- node[rel,right] {インラインメタデータ} (uv);
+  \draw[->] (uv) -- node[rel,above] {作成または再利用} (cache);
+  \draw[->] (pypi) -- node[rel,right] {pyyaml} (cache);
+  \draw[->,dashed,gray] (uv) -- node[rel,right,text=gray!30!black] {無視：インストールもロックもしない} (repo);
+  \draw[->] (cache) -- node[rel,right] {check / stamp を実行} (omtkc);
+  \node[font=\footnotesize,text=gray!30!black,align=center] (_note) at (6.5,-5.6) {uv がない場合：python3 omtkc.py は先頭をコメントとして読み飛ばし，PyYAML か組み込みパーサーを使う．};
+\end{tikzpicture}

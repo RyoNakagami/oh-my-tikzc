@@ -1,0 +1,37 @@
+#| mainfont: IPAexGothic
+% Who does what when oh-my-tikzc runs. The AI agent drives every step.
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  % White background so the figure stays readable on dark themes.
+  \path[fill=white] (-1.86,-5.88) rectangle (15.82,4.55);
+  \node[external] (user) at (0,0) {User\\chat request};
+  \node[entry] (agent) at (6,0) {AI coding agent\\Claude Code / Codex};
+  \node[block] (skill) at (6,3.4) {Skill package\\SKILL.md, references/,\\assets/, scripts/};
+  \node[external] (repo) at (6,-3.6) {Target repository\\source code + git};
+  \node[store] (omtkc) at (13,0) {.omtkc/\\description.md, meta.yaml,\\diagram.tikz/.svg/.png};
+  \node[external] (tikzc) at (13,3.6) {tikzc CLI\\check, render};
+  \node[block] (checker) at (13,-3.6) {omtkc.py\\check, tree, stale, stamp};
+
+  \draw[->] (user) -- node[rel,above] {request} (agent);
+  \draw[->] (skill) -- node[rel,right] {workflow + format rules} (agent);
+  \draw[->] (repo) -- node[rel,right] {reads source, HEAD} (agent);
+  \draw[->] (agent) -- node[rel,above] {writes files} (omtkc);
+  \draw[->] ([xshift=-6mm]omtkc.north) -- node[rel,left] {diagram.tikz} ([xshift=-6mm]tikzc.south);
+  \draw[->] ([xshift=6mm]tikzc.south) -- node[rel,right] {SVG / PNG} ([xshift=6mm]omtkc.north);
+  \draw[->] ([xshift=-6mm]omtkc.south) -- node[rel,left] {validates tree} ([xshift=-6mm]checker.north);
+  \draw[->] ([xshift=6mm]checker.north) -- node[rel,right] {stamp render} ([xshift=6mm]omtkc.south);
+  \draw[->] (repo) -- node[rel,above] {git diff} (checker);
+  \node[font=\footnotesize,text=gray!30!black] (_note) at (6,-5.3) {The agent runs tikzc and omtkc.py; you can also run them by hand.};
+\end{tikzpicture}

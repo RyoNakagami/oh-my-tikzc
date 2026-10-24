@@ -1,0 +1,34 @@
+#| mainfont: IPAexGothic
+% How `uv run omtkc.py` gets its dependencies without touching the analyzed project.
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  % White background so the figure stays readable on dark themes.
+  \path[fill=white] (-1.86,-6.17) rectangle (15.99,4.93);
+  \node[entry] (caller) at (0,0) {AI agent or you\\shell command};
+  \node[block] (script) at (6.5,3.6) {omtkc.py header\\\# /// script\\requires-python >=3.10\\dependencies: pyyaml>=6};
+  \node[external] (uv) at (6.5,0) {uv\\script mode};
+  \node[external] (pypi) at (13,3.6) {PyPI\\first run only};
+  \node[store] (cache) at (13,0) {uv cache\\throwaway env:\\Python + PyYAML};
+  \node[context] (repo) at (6.5,-3.8) {Project environment\\pyproject.toml, uv.lock, .venv/};
+  \node[store] (omtkc) at (13,-3.8) {.omtkc/\\the only files written};
+
+  \draw[->] (caller) -- node[rel,above] {uv run omtkc.py} (uv);
+  \draw[->] (script) -- node[rel,right] {inline metadata} (uv);
+  \draw[->] (uv) -- node[rel,above] {create or reuse} (cache);
+  \draw[->] (pypi) -- node[rel,right] {pyyaml} (cache);
+  \draw[->,dashed,gray] (uv) -- node[rel,right,text=gray!30!black] {ignored: nothing installed or locked} (repo);
+  \draw[->] (cache) -- node[rel,right] {runs check / stamp} (omtkc);
+  \node[font=\footnotesize,text=gray!30!black,align=center] (_note) at (6.5,-5.6) {Without uv: python3 omtkc.py treats the header as comments and uses PyYAML or a built-in parser.};
+\end{tikzpicture}

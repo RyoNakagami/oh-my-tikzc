@@ -1,0 +1,10 @@
+kind: leaf
+status: active
+sources:
+  - src/expand.rs
+  - src/expand/number.rs
+  - src/syntax.rs
+children: []
+refs: []
+analyzed_commit: 32ac110
+working_tree_dirty: false

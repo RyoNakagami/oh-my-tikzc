@@ -1,0 +1,37 @@
+#| mainfont: IPAexGothic
+% 新規スキャン時に SKILL.md がエージェントに課す手順．
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  % White background so the figure stays readable on dark themes.
+  \path[fill=white] (-2.91,-8.68) rectangle (14.67,3.96);
+  \node[external] (repo) at (0,3) {対象リポジトリ\\マニフェスト, エントリポイント};
+  \node[entry] (scope) at (0,0) {1. スコープを決める\\config.yaml, HEAD};
+  \node[block] (perspectives) at (6,0) {2. パースペクティブを選ぶ\\overall-architecture + \dots};
+  \node[block] (tree) at (12,0) {3. ツリーを組み立てる\\ノードごとに group / leaf};
+  \node[block] (write) at (12,-3.6) {4. ファイルを書く\\description.md, meta.yaml,\\diagram.tikz};
+  \node[block] (render) at (6,-3.6) {5. 描画して目視確認\\tikzc check, SVG/PNG};
+  \node[block] (validate) at (0,-3.6) {6. 記録して検査\\omtkc.py stamp, check};
+  \node[store] (omtkc) at (0,-7) {.omtkc/\\コードと一緒にコミット};
+
+  \draw[->] (repo) -- node[rel,right] {読む} (scope);
+  \draw[->] (scope) -- node[rel,above] {スコープ} (perspectives);
+  \draw[->] (perspectives) -- node[rel,above] {問い} (tree);
+  \draw[->] ([xshift=8mm]tree.north) -- ++(0,0.9) -| node[rel,pos=0.25,above] {group を掘り下げる} ([xshift=-8mm]tree.north);
+  \draw[->] (tree) -- node[rel,right] {ノード + sources} (write);
+  \draw[->] ([yshift=3mm]write.west) -- node[rel,above] {diagram.tikz} ([yshift=3mm]render.east);
+  \draw[->] ([yshift=-3mm]render.east) -- node[rel,below] {修正} ([yshift=-3mm]write.west);
+  \draw[->] (render) -- node[rel,above] {確認済み} (validate);
+  \draw[->] (validate) -- node[rel,right] {エラーなし} (omtkc);
+\end{tikzpicture}

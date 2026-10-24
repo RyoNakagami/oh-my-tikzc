@@ -1,0 +1,11 @@
+schema: omtkc/1
+language: ja
+snapshot:
+  repository: https://github.com/RyoNakagami/tikzc
+  commit: ef3a589541731a9c7098921c25f4770d86ac5d37
+scope:
+  - src/
+  - assets/fonts/
+  - vscode-extension/src/
+  - vscode-extension/webview/
+  - vscode-extension/package.json

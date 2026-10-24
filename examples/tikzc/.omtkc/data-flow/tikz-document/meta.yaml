@@ -1,0 +1,8 @@
+kind: leaf
+status: active
+sources:
+  - vscode-extension/src/preview/preview.ts#request
+children: []
+refs: [overall-architecture/tikz-source]
+analyzed_commit: 32ac110
+working_tree_dirty: false

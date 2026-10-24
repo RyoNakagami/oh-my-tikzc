@@ -1,0 +1,19 @@
+meta-data:
+  repository_name: oh-my-tikzc
+  visibility: public
+  org-name: RyoNakagami
+  version: 0.1.0
+  tag:
+    - claude-code
+    - codex
+    - agent-skills
+    - claude-code-plugin
+    - architecture
+    - documentation
+    - diagrams
+    - tikz
+    - tikzc
+  description: |
+    Architecture documentation for people, generated from code by Claude Code or Codex and rendered with tikzc.
+  homepage: null
+  license: mit

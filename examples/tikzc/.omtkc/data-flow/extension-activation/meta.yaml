@@ -1,0 +1,9 @@
+kind: leaf
+status: active
+sources:
+  - vscode-extension/src/extension.ts
+  - vscode-extension/package.json
+children: []
+refs: []
+analyzed_commit: ef3a589
+working_tree_dirty: false

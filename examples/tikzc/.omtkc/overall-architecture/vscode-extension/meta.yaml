@@ -1,0 +1,10 @@
+kind: leaf
+status: active
+sources:
+  - vscode-extension/src/
+  - vscode-extension/webview/
+  - vscode-extension/package.json
+children: []
+refs: [data-flow]
+analyzed_commit: ef3a589
+working_tree_dirty: false

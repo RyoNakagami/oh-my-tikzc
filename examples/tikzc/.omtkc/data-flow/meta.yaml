@@ -1,0 +1,15 @@
+kind: group
+status: active
+sources:
+  - vscode-extension/src/extension.ts
+  - vscode-extension/src/preview/preview.ts
+  - src/main.rs#preview_server
+children: [tikz-document, extension-activation, preview-controller, preview-queue, rust-renderer, native-worker, tikzc-preview-server, webview, canvas-editing, export-files]
+refs: [overall-architecture/vscode-extension]
+analyzed_commit: 32ac110
+working_tree_dirty: false
+render:
+  tikz_sha256: db37243b1136157045dd64211354b533c13cf06141ef105d039252a865d77314
+  tikzc_version: 1.2.1
+  check: pass
+  visual: inspected

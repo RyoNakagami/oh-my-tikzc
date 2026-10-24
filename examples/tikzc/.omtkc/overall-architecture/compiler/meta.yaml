@@ -1,0 +1,14 @@
+kind: group
+status: active
+sources:
+  - src/lib.rs
+  - src/render.rs
+children: [public-api, render-engine, diagram-artifact, text-engine, embedded-fonts, macro-expander, option-resolver, math-evaluator]
+refs: []
+analyzed_commit: 32ac110
+working_tree_dirty: false
+render:
+  tikz_sha256: bb51188229698bf7d99ac995db64cb6e846c21e17f34de8b2e976c6486430608
+  tikzc_version: 1.2.1
+  check: pass
+  visual: inspected

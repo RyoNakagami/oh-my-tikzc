@@ -1,0 +1,13 @@
+kind: group
+status: active
+sources:
+  - src/render.rs
+children: [command-loop, nodes, geometry, paths, label-svg, paint, path-features, path-editing]
+refs: []
+analyzed_commit: 32ac110
+working_tree_dirty: false
+render:
+  tikz_sha256: d870dc721f7bc5f1c6f81c56df06d87a7e22951d69f3388da48b33975102e087
+  tikzc_version: 1.2.1
+  check: pass
+  visual: inspected

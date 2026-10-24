@@ -1,0 +1,9 @@
+kind: leaf
+status: active
+sources:
+  - src/render/label_svg.rs
+  - src/render/glyph_path.rs
+children: []
+refs: []
+analyzed_commit: 32ac110
+working_tree_dirty: false

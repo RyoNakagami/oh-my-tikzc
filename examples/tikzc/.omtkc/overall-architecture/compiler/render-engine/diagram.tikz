@@ -1,0 +1,36 @@
+#| mainfont: IPAexGothic
+% render-engine: コマンドループと描画モジュールの分担．
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  \node[entry] (command-loop) at (0,0) {コマンドループ\\src/render.rs};
+  \node[block] (nodes) at (6,3.2) {ノード配置\\render/nodes.rs};
+  \node[block] (geometry) at (6,0) {座標と形状\\render/coordinates.rs ほか};
+  \node[block] (paths) at (6,-3.2) {パス構築\\render/paths.rs};
+  \node[block] (label-svg) at (12.5,4.8) {ラベル SVG 共有\\render/label\_svg.rs};
+  \node[block] (paint) at (12.5,1.6) {塗り・線の属性\\render/paint.rs};
+  \node[block] (path-features) at (12.5,-3.2) {パス拡張機能\\plot / 交点 / markings};
+  \node[block] (path-editing) at (6,-6.6) {編集ハンドル\\render/path\_editing.rs};
+
+  \draw[->] (command-loop) -- node[rel,above left] {\textbackslash node・\textbackslash matrix} (nodes);
+  \draw[->] (command-loop) -- node[rel,above] {\textbackslash coordinate} (geometry);
+  \draw[->] (command-loop) -- node[rel,below left] {\textbackslash draw・\textbackslash fill など} (paths);
+  \draw[->] (nodes) -- node[rel,right] {位置式・アンカー} (geometry);
+  \draw[->] (paths) -- node[rel,right] {座標式・境界点} (geometry);
+  \draw[->] (nodes) -- node[rel,above left] {Typst ラベル SVG} (label-svg);
+  \draw[->] (nodes) -- node[rel,below,pos=0.55] {枠線・塗り} (paint);
+  \draw[->] (paths) -- node[rel,below right,pos=0.6] {stroke・fill} (paint);
+  \draw[->] (paths) -- node[rel,above] {plot・name path 等} (path-features);
+  \draw[->] (paths) -- node[rel,right] {点の範囲と座標} (path-editing);
+\end{tikzpicture}

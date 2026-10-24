@@ -1,0 +1,32 @@
+#| mainfont: IPAexGothic
+% 更新サイクル：meta.yaml の analyzed_commit が次回の基準になる．
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  % White background so the figure stays readable on dark themes.
+  \path[fill=white] (-2.41,-5.32) rectangle (16.21,0.97);
+  \node[entry] (change) at (0,0) {コード変更\\新しいコミット};
+  \node[block] (stale) at (7,0) {omtkc.py stale\\STALE / NEW / UNKNOWN};
+  \node[block] (reread) at (14,0) {ソースを読み直す\\+ 呼び出し元・先, 設定};
+  \node[block] (update) at (14,-3.6) {要素を更新\\note.md と ID は保持};
+  \node[block] (validate) at (7,-3.6) {描画・記録・検査\\tikzc + omtkc.py};
+  \node[store] (commit) at (0,-3.6) {.omtkc/\\analyzed\_commit を更新};
+
+  \draw[->] (change) -- node[rel,above] {更新依頼} (stale);
+  \draw[->] (stale) -- node[rel,above] {変更ファイル} (reread);
+  \draw[->] (reread) -- node[rel,right] {影響する要素} (update);
+  \draw[->] (update) -- node[rel,above] {変更した図} (validate);
+  \draw[->] (validate) -- node[rel,above] {エラーなし} (commit);
+  \draw[->] (commit) -- node[rel,left] {次回の基準} (change);
+\end{tikzpicture}

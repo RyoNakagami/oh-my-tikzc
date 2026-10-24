@@ -1,0 +1,12 @@
+{
+  "name": "oh-my-tikzc",
+  "version": "0.1.0",
+  "description": "Explain codebases with hierarchical, evidence-based TikZ architecture diagrams rendered by tikzc",
+  "author": {
+    "name": "Ryo Nakagami"
+  },
+  "homepage": "https://github.com/RyoNakagami/oh-my-tikzc",
+  "repository": "https://github.com/RyoNakagami/oh-my-tikzc",
+  "license": "MIT",
+  "keywords": ["architecture", "documentation", "tikz", "tikzc", "diagram"]
+}

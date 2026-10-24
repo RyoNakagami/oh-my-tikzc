@@ -1,0 +1,36 @@
+#| mainfont: IPAexGothic
+% compiler: TikZ ソースから Diagram までの内部構成．
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  \node[entry] (public-api) at (0,0) {公開 API\\src/lib.rs};
+  \node[block] (render-engine) at (7,0) {描画エンジン\\src/render.rs, render/};
+  \node[block] (diagram-artifact) at (14,0) {Diagram 成果物\\src/render/diagram.rs};
+  \node[block] (text-engine) at (7,4) {テキストエンジン\\src/text.rs};
+  \node[store] (embedded-fonts) at (14,4) {埋め込みフォント\\assets/fonts/};
+  \node[block] (macro-expander) at (2.5,-4.5) {マクロ展開器\\src/expand.rs};
+  \node[block] (option-resolver) at (11.5,-4.5) {オプション解決\\src/options.rs};
+  \node[block] (math-evaluator) at (7,-8) {数式評価器\\src/expr.rs};
+
+  \draw[->] (public-api) -- node[rel,above] {compile(source)} (render-engine);
+  \draw[->] (render-engine) -- node[rel,above] {SVG・editing} (diagram-artifact);
+  \draw[->] ([xshift=-6mm]render-engine.north) -- node[rel,left] {ラベル本文・フォント} ([xshift=-6mm]text-engine.south);
+  \draw[<-] ([xshift=6mm]render-engine.north) -- node[rel,right] {Label (SVG・寸法)} ([xshift=6mm]text-engine.south);
+  \draw[->] (embedded-fonts) -- node[rel,above] {include\_bytes!} (text-engine);
+  \draw[->] (render-engine.south west) -- node[rel,above left] {ソース文字列} ([xshift=8mm]macro-expander.north);
+  \draw[<-] ([xshift=10mm]render-engine.south west) -- node[rel,below right,pos=0.6] {Expanded (本文＋元位置)} ([xshift=18mm]macro-expander.north);
+  \draw[->] (render-engine.south east) -- node[rel,above right] {オプション文字列} (option-resolver.north);
+  \draw[->] (macro-expander.south) |- node[rel,pos=0.25,left] {\textbackslash pgfmath の式} (math-evaluator.west);
+  \draw[->] (option-resolver.south) |- node[rel,pos=0.25,right] {寸法式} (math-evaluator.east);
+\end{tikzpicture}

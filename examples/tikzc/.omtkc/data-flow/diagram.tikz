@@ -1,0 +1,44 @@
+#| mainfont: IPAexGothic
+% data-flow: VSCode プレビュー・キャンバス編集・エクスポートのデータの流れ．
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  \node[store] (tikz-document) at (7,4.5) {.tikz ドキュメント\\VSCode TextDocument};
+  \node[store] (export-files) at (14,4.5) {エクスポート先\\SVG / PNG};
+  \node[entry] (extension-activation) at (0,0) {拡張の起動\\src/extension.ts};
+  \node[block] (preview-controller) at (7,0) {プレビュー制御\\src/preview/preview.ts};
+  \node[block] (canvas-editing) at (14,0) {キャンバス編集\\src/preview/editing.ts};
+  \node[block] (webview) at (-1.5,-4.5) {Webview\\webview/native-preview.ts};
+  \node[block] (preview-queue) at (7,-4.5) {更新キュー\\preview-queue.ts};
+  \node[block] (rust-renderer) at (14,-4.5) {Rust レンダラ呼び出し\\src/preview/renderer.ts};
+  \node[block] (tikzc-preview-server) at (7,-9) {tikzc プレビューサーバ\\src/main.rs};
+  \node[block] (native-worker) at (14,-9) {常駐ワーカー\\src/preview/worker.ts};
+
+  \draw[->] (extension-activation) -- node[rel,above] {コマンド登録} (preview-controller);
+  \draw[->] ([xshift=-6mm]tikz-document.south) -- node[rel,left] {本文・変更イベント} ([xshift=-6mm]preview-controller.north);
+  \draw[<-] ([xshift=6mm]tikz-document.south) -- node[rel,right] {検証済みの編集} ([xshift=6mm]preview-controller.north);
+  \draw[->] (preview-controller.north east) -- node[rel,right,pos=0.7] {writeFile} (export-files.south west);
+  \draw[->] ([yshift=3mm]preview-controller.east) -- node[rel,above] {メタデータ＋操作} ([yshift=3mm]canvas-editing.west);
+  \draw[<-] ([yshift=-3mm]preview-controller.east) -- node[rel,below] {SourceEdit} ([yshift=-3mm]canvas-editing.west);
+  \draw[->] (preview-controller.south west) -- node[rel,above left] {render メッセージ} ([xshift=8mm]webview.north);
+  \draw[<-] ([xshift=10mm]preview-controller.south west) -- node[rel,below right,pos=0.75] {edit・insert・export} ([xshift=18mm]webview.north);
+  \draw[->] ([xshift=-6mm]preview-controller.south) -- node[rel,left,pos=0.7] {RenderRequest} ([xshift=-6mm]preview-queue.north);
+  \draw[<-] ([xshift=6mm]preview-controller.south) -- node[rel,right,pos=0.7] {publish} ([xshift=6mm]preview-queue.north);
+  \draw[->] (preview-controller.south east) -- node[rel,above right,pos=0.55] {編集候補・エクスポート} (rust-renderer.north west);
+  \draw[->] ([yshift=3mm]preview-queue.east) -- node[rel,above] {render(request)} ([yshift=3mm]rust-renderer.west);
+  \draw[<-] ([yshift=-3mm]preview-queue.east) -- node[rel,below] {RenderArtifact} ([yshift=-3mm]rust-renderer.west);
+  \draw[->] ([xshift=-6mm]rust-renderer.south) -- node[rel,left] {source・dpi} ([xshift=-6mm]native-worker.north);
+  \draw[<-] ([xshift=6mm]rust-renderer.south) -- node[rel,right] {svg・png・editing} ([xshift=6mm]native-worker.north);
+  \draw[<->] (native-worker) -- node[rel,above] {JSON 行} node[rel,below] {stdin / stdout} (tikzc-preview-server);
+\end{tikzpicture}

@@ -1,0 +1,31 @@
+#| mainfont: IPAexGothic
+% Illustrative architecture only; replace with evidence from the target repository.
+% Copy the whole option block below (through the closing "]") into every diagram.
+% Semantic nodes use kebab-case IDs that match child directories.
+% Decorative and context nodes have no ID or an ID starting with "_"; they never get directories.
+% Roles combine: \node[entry,concern], \node[store,concern].
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  \node[entry] (command-router) at (0,0) {Command router\\src/cli.rs};
+  \node[concern] (renderer) at (5.8,0) {Renderer\\src/render.rs};
+  \node[store] (font-cache) at (5.8,-3) {Font cache\\assets/fonts/};
+  \node[external] (output-files) at (11.6,0) {SVG / PNG files\\External output};
+  \node[context] (_ctx-config) at (0,-3) {Config\\(parent level)};
+  \draw[->] (command-router) -- node[rel,above] {diagram source} (renderer);
+  \draw[->] (renderer) -- node[rel,above] {rendered image} (output-files);
+  \draw[->] (font-cache) -- node[rel,right] {glyph outlines} (renderer);
+  \draw[->] (_ctx-config) -- node[rel,left] {options} (command-router);
+  \node[font=\footnotesize] (_note) at (5.8,-4.6) {構造を読み解き，図と説明を残す．};
+\end{tikzpicture}

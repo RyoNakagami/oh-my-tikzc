@@ -1,0 +1,9 @@
+kind: leaf
+status: active
+sources:
+  - assets/fonts/
+  - src/text.rs#TextEngine::new
+children: []
+refs: []
+analyzed_commit: ef3a589
+working_tree_dirty: false

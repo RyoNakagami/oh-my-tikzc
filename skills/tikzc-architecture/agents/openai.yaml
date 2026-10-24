@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tikzc Architecture"
+  short_description: "Explain codebases with hierarchical TikZ diagrams"
+  default_prompt: "Use $tikzc-architecture to document this repository with evidence-based architecture views and validated tikzc diagrams."

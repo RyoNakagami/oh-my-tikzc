@@ -1,0 +1,17 @@
+kind: group
+status: active
+sources:
+  - src/main.rs
+  - src/lib.rs
+  - src/render.rs
+  - vscode-extension/src/extension.ts
+  - Cargo.toml
+children: [tikz-source, cli, compiler, vscode-extension, output-files]
+refs: []
+analyzed_commit: ef3a589
+working_tree_dirty: false
+render:
+  tikz_sha256: 37f4face29dc6bce0a40d8626a1666d4ab706c3cbdc3a300ee3936b72e2a010f
+  tikzc_version: 1.2.1
+  check: pass
+  visual: inspected

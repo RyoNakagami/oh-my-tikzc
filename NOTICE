@@ -1,0 +1,13 @@
+oh-my-tikzc adapts the perspective-based recursive architecture documentation
+workflow of oh-my-mermaid, especially skills/omm-scan/SKILL.md.
+
+Upstream: https://github.com/oh-my-mermaid/oh-my-mermaid
+Copyright (c) 2025 oh-my-mermaid
+License: MIT (retained in LICENSE)
+
+The adaptation replaces Mermaid/omm operations with native tikzc rendering,
+source evidence, static Markdown navigation, and a shared Claude Code/Codex
+skill package. No cloud workflow is included.
+
+Renderer dependency: https://github.com/RyoNakagami/tikzc
+tikzc is separately installed and is not redistributed by this package.

@@ -1,0 +1,31 @@
+#| mainfont: IPAexGothic
+% overall-architecture: tikzc 全体の構成要素．
+\begin{tikzpicture}[
+  block/.style={draw=blue!65!black,fill=blue!7,rounded corners=3pt,
+    align=center,minimum width=3cm,minimum height=1.2cm,inner sep=7pt},
+  entry/.style={block,line width=1.6pt},
+  store/.style={block,shape=cylinder,shape border rotate=90,aspect=0.25,
+    draw=green!45!black,fill=green!8,rounded corners=0pt},
+  external/.style={block,draw=gray!75!black,fill=gray!8,dashed},
+  concern/.style={block,draw=red!70!black,fill=red!6,
+    dash pattern=on 5pt off 2pt on 1pt off 2pt,
+    label={[font=\footnotesize\bfseries,text=red!70!black,inner sep=3pt]45:!}},
+  context/.style={block,draw=gray!70,fill=white,text=gray!30!black,dotted},
+  rel/.style={font=\footnotesize,fill=white,inner sep=2pt},
+  >={Stealth[length=2.5mm]},font=\small,line width=0.7pt
+]
+  \node[external] (tikz-source) at (0,0) {TikZ ソース\\利用者の .tikz};
+  \node[entry,concern] (cli) at (7,0) {tikzc CLI\\src/main.rs};
+  \node[block] (compiler) at (14,0) {コンパイラ\\src/render.rs ほか};
+  \node[entry] (vscode-extension) at (7,-4.5) {VSCode 拡張\\vscode-extension/};
+  \node[store] (output-files) at (14,-4.5) {SVG / PNG ファイル\\出力先};
+
+  \draw[->] (tikz-source) -- node[rel,above] {ファイル読み込み} (cli);
+  \draw[->] ([yshift=3mm]cli.east) -- node[rel,above] {ソース文字列} ([yshift=3mm]compiler.west);
+  \draw[<-] ([yshift=-3mm]cli.east) -- node[rel,below] {Diagram / 診断} ([yshift=-3mm]compiler.west);
+  \draw[->] (cli) -- node[rel,above right] {SVG・PNG 書き込み} (output-files);
+  \draw[->] (tikz-source) |- node[rel,pos=0.25,left] {エディタ上の本文} (vscode-extension);
+  \draw[->] ([xshift=-6mm]vscode-extension.north) -- node[rel,left] {preview-server 要求 (JSON)} ([xshift=-6mm]cli.south);
+  \draw[<-] ([xshift=6mm]vscode-extension.north) -- node[rel,right] {SVG・PNG・editing} ([xshift=6mm]cli.south);
+  \draw[->] (vscode-extension) -- node[rel,below] {エクスポート} (output-files);
+\end{tikzpicture}

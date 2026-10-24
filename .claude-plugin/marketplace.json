@@ -1,0 +1,17 @@
+{
+  "name": "oh-my-tikzc",
+  "owner": {
+    "name": "Ryo Nakagami"
+  },
+  "metadata": {
+    "description": "Architecture documentation generated from code and rendered with tikzc"
+  },
+  "plugins": [
+    {
+      "name": "oh-my-tikzc",
+      "description": "Explain codebases with hierarchical, evidence-based TikZ architecture diagrams rendered by tikzc",
+      "source": "./",
+      "category": "documentation"
+    }
+  ]
+}
